@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Downloaded and generated data (large / reproducible)
+data/cache/
+data/raw/*.csv
+data/raw/*.json
+!data/raw/source_metadata.json
+data/raw/*.log
+data/raw/*.part
+data/processed/nps_visitation_cleaned.csv
+
+# Local scratch
+*.log
+*.part
+.DS_Store
+
+# CI scratch diagnostics (not deliverables)
+diag/

@@ -1,0 +1,18 @@
+{
+  "referenceId": 2317666,
+  "referenceType": "Data Package",
+  "citation": "Ziesler P. 2026. NPS Visitor Use Statistics Data Package, 2025. National Park Service. Fort Collins CO  https://doi.org/10.57830/2317666",
+  "bibliography": {
+    "title": "NPS Visitor Use Statistics Data Package, 2025",
+    "issued": {"bibliographic": "March 26, 2026", "precision": "YYYYMMDD", "year": 2026, "yyyymmdd": "2026-03-26"},
+    "contentBegin": {"bibliographic": "January 1, 1979", "precision": "YYYYMMDD", "year": 1979, "yyyymmdd": "1979-01-01"},
+    "contentEnd": {"bibliographic": "December 31, 2025", "precision": "YYYYMMDD", "year": 2025, "yyyymmdd": "2025-12-31"},
+    "licenseType": "Creative Commons Zero v1.0 Universal"
+  },
+  "filesAndLinks": [
+    {"fileId": 756959, "resourceType": "Digital File", "description": "Main Visitor Use Statistics Dataset, 1979-2025", "url": "https://irma.nps.gov/DataStore/DownloadFile/756959", "fileName": "Main_Data.csv"},
+    {"fileId": 756960, "resourceType": "Digital File", "description": "Main State Visitor Use Statistics Dataset, 2016-2025", "url": "https://irma.nps.gov/DataStore/DownloadFile/756960", "fileName": "Main_State_Data.csv"},
+    {"fileId": 756961, "resourceType": "Digital File", "description": "EML Metadata", "url": "https://irma.nps.gov/DataStore/DownloadFile/756961", "fileName": "NPS_VUStats_Data_2025_metadata.xml"}
+  ],
+  "permissions": {"fileAccess": "Public", "referenceOwners": "Pamela Ziesler"}
+}
