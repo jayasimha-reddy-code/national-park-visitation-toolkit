@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-10-07T16:30:12Z",
+  "tool": "scraper/scrape_nps_visitation.py",
+  "source_page": {
+    "url": "https://www.nps.gov/subjects/socialscience/visitor-use-statistics-dashboard.htm",
+    "title": "Visitor Use Data",
+    "last_updated": "2026-03-26",
+    "package_year": 2025,
+    "irma_reference_id": "2317666",
+    "irma_url": "https://irma.nps.gov/DataStore/Reference/Profile/2317666"
+  },
+  "data_package": {
+    "reference_id": "2317666",
+    "title": "NPS Visitor Use Statistics Data Package, 2025",
+    "package_year": 2025,
+    "content_begin": "1979-01-01",
+    "content_end": "2025-12-31",
+    "published": "2026-03-26",
+    "doi": "10.57830/2317666",
+    "license": "Creative Commons Zero v1.0 Universal",
+    "total_files": 4
+  },
+  "selected_file": {
+    "file_id": 756959,
+    "filename": "Main_Data.csv",
+    "size_bytes": 72212002,
+    "description": "Primary monthly visitation dataset by unit code and statistic",
+    "datastore_api_download_url": "https://irmaservices.nps.gov/datastore/v7/rest/DownloadFile/756959?accessType=DOWNLOAD"
+  },
+  "download": {
+    "path": "data/raw/Main_Data.csv",
+    "bytes": 72212002,
+    "sha256": "284ab33b15e9a817948cba4663ed33748ba24dbbc36b750be2b2cfbb662fe912",
+    "from_existing_file": false,
+    "verified_header": "UnitCode,UnitName,UnitType,Year,Month,Statistic,Value"
+  },
+  "method_note": "NPS page inspected with Requests + BeautifulSoup. The Power BI dashboard is JavaScript-driven and was not scraped. Exactly one official CSV (Main_Data.csv) was retrieved from the official IRMA DataStore REST API. The package ends at the latest finalized calendar year; current-year preliminary data are excluded.",
+  "metadata_source": "datastore_api_v7",
+  "profile_page_is_javascript_driven": true,
+  "robots_notes": {
+    "crawling_datastore_download_disallowed": "Adhered to by querying metadata through public REST API endpoint instead of scraping web interface"
+  },
+  "citation": "Ziesler, P. 2026. NPS Visitor Use Statistics Data Package, 2025. National Park Service. Fort Collins CO. https://doi.org/10.57830/2317666",
+  "license": "Creative Commons Zero v1.0 Universal",
+  "coverage": {
+    "begin": "1979-01-01",
+    "end": "2025-12-31",
+    "latest_finalized_year": 2025
+  },
+  "access_date_utc": "2026-10-07"
+}
