@@ -1,0 +1,99 @@
+name: Refresh official NPS data and analysis
+
+# Manual only: each run downloads the 72 MB official package from NPS.
+# Dispatch it when you want a fresh data pull, not on every commit.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt matplotlib nbconvert ipykernel
+
+      - name: Run test suite
+        run: python -m pytest -q
+
+      - name: Download official package
+        run: |
+          mkdir -p data/raw reports
+          python -m scraper.scrape_nps_visitation \
+            --outdir data/raw \
+            --cache-dir data/cache \
+            --log-file data/raw/scrape.log \
+            --connect-timeout 20 \
+            --read-timeout 300 \
+            --retries 3 2>&1 | tee data/raw/scrape_stdout.log
+
+      - name: Clean official CSV
+        run: |
+          python -m scraper.clean_visitation \
+            --input data/raw/Main_Data.csv \
+            --output data/processed/nps_visitation_cleaned.csv \
+            --report data/processed/nps_data_quality_report.md \
+            --issues data/processed/nps_data_quality_issues.csv \
+            --source-metadata data/raw/source_metadata.json \
+            --log-file data/processed/clean.log 2>&1 | tee reports/refresh_clean.log
+
+      - name: Execute analysis notebook end to end
+        env:
+          NPS_CLEANED_CSV: data/processed/nps_visitation_cleaned.csv
+        run: |
+          python -m nbconvert --to notebook --execute --inplace \
+            notebooks/visitation_analysis.ipynb \
+            --ExecutePreprocessor.timeout=1800 2>&1 | tee reports/refresh_notebook.log
+
+      - name: Summarize outputs
+        if: always()
+        run: |
+          set +e
+          ls -lh reports/figures reports/tables data/processed data/raw || true
+          wc -l data/processed/nps_visitation_cleaned.csv || true
+          cp data/raw/scrape.log reports/refresh_scrape.log 2>/dev/null || true
+          tail -n 200 reports/refresh_scrape.log 2>/dev/null || true
+
+      - name: Commit analysis outputs
+        if: always()
+        run: |
+          set +e
+          git config user.name "nps-toolkit-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add -f notebooks/visitation_analysis.ipynb
+          git add -f reports
+          git add -f data/processed/nps_data_quality_report.md data/processed/nps_data_quality_issues.csv
+          git add -f data/raw/source_metadata.json
+          git status --short
+          git commit -m "Run official data refresh and analysis [skip ci]"
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" || true
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+              echo "push succeeded on attempt $attempt"
+              break
+            fi
+            sleep 5
+          done
+
+      - name: Upload data artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nps-official-data
+          if-no-files-found: warn
+          retention-days: 7
+          path: |
+            data/processed/nps_visitation_cleaned.csv
+            data/raw/source_metadata.json
+            reports
